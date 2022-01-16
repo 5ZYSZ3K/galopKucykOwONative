@@ -1,43 +1,53 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  StyleSheet,
   View,
+  StyleSheet,
   ImageBackground,
   TextInput,
   Text,
   Pressable,
-  StatusBar,
 } from "react-native";
-import image from "./assets/tloapka.png";
+import image from "./assets/tlo.png";
 
-export default function App({ navigation }) {
-  const [errorMessage, setErrorMessage] = useState("");
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
+export default function AddReminder({ route, navigation }) {
+  const [value, setValue] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [repeat, setRepeat] = useState("");
   const pressHandler = () => {
-    if (login === "login" && password === "password") {
-      navigation.navigate("Home");
-    } else setErrorMessage("Zły login lub hasło");
+    route.params.setReminders([
+      ...route.params.reminders,
+      { value, date, time, repeat },
+    ]);
+    navigation.navigate("Przypomnienia");
   };
   return (
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         <TextInput
           style={styles.login}
-          onChangeText={setLogin}
-          placeholder="login"
+          onChangeText={setValue}
+          placeholder="nazwa"
         />
         <TextInput
-          secureTextEntry={true}
           style={styles.login}
-          onChangeText={setPassword}
-          placeholder="hasło"
+          onChangeText={setDate}
+          placeholder="data"
+        />
+        <TextInput
+          style={styles.login}
+          onChangeText={setTime}
+          placeholder="czas"
+        />
+        <TextInput
+          style={styles.login}
+          onChangeText={setRepeat}
+          placeholder="co ile dni powtarzać"
         />
         <Pressable style={styles.button} onPress={pressHandler}>
-          <Text style={styles.text}>Zaloguj</Text>
+          <Text style={styles.text}>Dodaj</Text>
         </Pressable>
       </ImageBackground>
-      <Text>{errorMessage}</Text>
     </View>
   );
 }
